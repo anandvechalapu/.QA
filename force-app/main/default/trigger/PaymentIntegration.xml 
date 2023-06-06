@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Trigger PaymentIntegration on Order (after insert)>
+    <Statements>
+        <Set>
+            <String>Credit/Debit Cards</String>
+            <String>PayPal</String>
+            <String>Stripe</String>
+        </Set>
+        <List>
+            <Order></Order>
+        </List>
+        <ForEach>
+            <Trigger.New>
+                <If>
+                    <Set>.contains(<Order>.Payment_Method__c)</Set>
+                    <Then>
+                        <Order>.Payment_Page_URL__c = 'https://mypaymentgateway.com/securepayment'
+                        <List>.add(<Order>)</List>
+                    </Then>
+                </If>
+            </Trigger.New>
+        </ForEach>
+        <Update>
+            <List></List>
+        </Update>
+    </Statements>
+</Trigger>
